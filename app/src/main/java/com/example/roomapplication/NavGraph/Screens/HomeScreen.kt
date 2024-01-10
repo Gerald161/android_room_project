@@ -1,4 +1,4 @@
-package com.example.roomapplication.nav_graph.Screens
+package com.example.roomapplication.NavGraph.Screens
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -9,7 +9,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -28,7 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.roomapplication.MainViewModel
 import com.example.roomapplication.data.Person
-import com.example.roomapplication.nav_graph.Screen
+import com.example.roomapplication.NavGraph.Screen
 
 @Composable
 fun HomeScreen(navController: NavController){
@@ -70,6 +74,16 @@ fun HomeScreen(navController: NavController){
             label = {
                 Text("Enter Name")
             },
+            trailingIcon = {
+                IconButton(onClick = {
+                    // delete one entry
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = null,
+                    )
+                }
+            },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Go
@@ -105,6 +119,18 @@ fun HomeScreen(navController: NavController){
             }
         }) {
             Text("Add")
+        }
+
+        Button(onClick = {
+            myViewModel.deleteAllEntries()
+
+            Toast.makeText(
+                context,
+                "Blown to bits, reduced to atoms",
+                Toast.LENGTH_SHORT
+            ).show()
+        }) {
+            Text("Delete all")
         }
     }
 }

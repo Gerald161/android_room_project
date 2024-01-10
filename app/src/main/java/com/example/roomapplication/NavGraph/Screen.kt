@@ -1,4 +1,4 @@
-package com.example.roomapplication.nav_graph
+package com.example.roomapplication.NavGraph
 
 sealed class Screen(val route: String){
     object HomeScreen: Screen(route = "home_screen")
