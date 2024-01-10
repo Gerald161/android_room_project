@@ -1,5 +1,8 @@
 package com.example.roomapplication
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.roomapplication.data.Person
@@ -41,6 +44,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun getPerson(id: Int) : Flow<Person>{
+        println("This here fired")
         return personRepository.getPerson(id)
     }
 }
