@@ -6,6 +6,7 @@ import com.example.roomapplication.data.Person
 import com.example.roomapplication.repository.PersonRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,5 +26,21 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             personRepository.deleteAllEntries()
         }
+    }
+
+    fun deletePerson(person: Person){
+        viewModelScope.launch(Dispatchers.IO) {
+            personRepository.deletePerson(person)
+        }
+    }
+
+    fun updatePerson(person: Person){
+        viewModelScope.launch(Dispatchers.IO) {
+            personRepository.updatePerson(person)
+        }
+    }
+
+    fun getPerson(id: Int) : Flow<Person>{
+        return personRepository.getPerson(id)
     }
 }

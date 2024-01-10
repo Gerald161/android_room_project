@@ -1,10 +1,14 @@
 package com.example.roomapplication.NavGraph.Screens
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,6 +18,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -35,10 +40,11 @@ import com.example.roomapplication.data.Person
 import com.example.roomapplication.NavGraph.Screen
 
 @Composable
-fun HomeScreen(navController: NavController){
+fun HomeScreen(
+    navController: NavController,
+    myViewModel: MainViewModel = hiltViewModel()
+){
     val context = LocalContext.current
-
-    val myViewModel = hiltViewModel<MainViewModel>()
 
     val persons by myViewModel.allPersons.collectAsState(initial = emptyList())
 
@@ -55,12 +61,28 @@ fun HomeScreen(navController: NavController){
     ) {
         if(persons.isNotEmpty()){
             for (person in persons){
-                Text(
-                    text = person.name,
-                    modifier = Modifier.clickable {
-                        navController.navigate(route = Screen.DetailScreen.route)
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigate(route = Screen.DetailScreen.passId(person.id))
+                        }
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Text(
+                        text = person.name,
+                    )
+                    IconButton(onClick = {
+                        myViewModel.deletePerson(person)
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = null,
+                        )
                     }
-                )
+                }
             }
         }else{
             Text("Nothing added yet")
@@ -74,23 +96,13 @@ fun HomeScreen(navController: NavController){
             label = {
                 Text("Enter Name")
             },
-            trailingIcon = {
-                IconButton(onClick = {
-                    // delete one entry
-                }) {
-                    Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = null,
-                    )
-                }
-            },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Go
             ),
             keyboardActions = KeyboardActions(
                 onGo = {
-                    if(name != ""){
+                    if(name.replace("\\s".toRegex(), "") != ""){
                         myViewModel.addPerson(Person(0, name))
 
                         name = ""
@@ -100,13 +112,19 @@ fun HomeScreen(navController: NavController){
                             "Successfully added person",
                             Toast.LENGTH_SHORT
                         ).show()
+                    }else{
+                        Toast.makeText(
+                            context,
+                            "Please do not leave it empty",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             )
         )
 
         Button(onClick = {
-            if(name != ""){
+            if(name.replace("\\s".toRegex(), "") != ""){
                 myViewModel.addPerson(Person(0, name))
 
                 name = ""
@@ -114,6 +132,12 @@ fun HomeScreen(navController: NavController){
                 Toast.makeText(
                     context,
                     "Successfully added person",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }else{
+                Toast.makeText(
+                    context,
+                    "Please do not leave it empty",
                     Toast.LENGTH_SHORT
                 ).show()
             }
