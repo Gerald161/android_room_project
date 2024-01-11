@@ -44,7 +44,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun getPerson(id: Int) : Flow<Person>{
-        println("This here fired")
+//        println("This here fired")
         return personRepository.getPerson(id)
     }
 }

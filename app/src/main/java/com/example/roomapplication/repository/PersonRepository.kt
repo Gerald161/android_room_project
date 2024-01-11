@@ -9,7 +9,6 @@ class PersonRepository @Inject constructor(
     private val personDao : PersonDao
 ) {
     val allPersons = personDao.getAllPersons()
-
     fun getPerson(id: Int): Flow<Person> {
         return personDao.getPerson(id)
     }
